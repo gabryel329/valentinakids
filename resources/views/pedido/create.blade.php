@@ -133,9 +133,19 @@
                                         <div class="row">
                                             <div class="col-12" style="align-items: center">
                                                 <button type="button" onclick="qtdporcao({{ $produto->id }},0)" class="sub btn btn-danger"><strong>-</strong></button>
-                                                <input type="text" id="qtd{{ $produto->id }}" class="qtyBox" name="produtos[{{ $produto->id }}][quantidade]" readonly="" value="0">
-                                                <button type="button" onclick="qtdporcao({{ $produto->id }},1)" class="add btn btn-success"><strong>+</strong></button>
+                                                <input type="text" id="qtd{{ $produto->id }}" class="qtyBox" name="produtos[{{ $produto->id }}][quantidade]" readonly="" value="0" max="1">
+                                                <button type="button" onclick="qtdporcao({{ $produto->id }},1)" class="add btn btn-success" ><strong>+</strong></button>
                                                 <input type="hidden" id="prod{{ $produto->id }}" name="produtos[{{ $produto->id }}][id]" value="{{ $produto->id }}">
+
+                                                <div class="form-group">
+                                                    <label for="">Tamanho</label>
+                                                    <select class="form-control" name="produtos[{{ $produto->id }}][tamanho]" onchange="toggleTamanhoSelect({{ $produto->id }})">
+                                                        <option selected required></option>
+                                                        @foreach($produto->tamanhos as $tamanho)
+                                                        <option value="{{ $tamanho->id }}">{{ $tamanho->nome }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -149,6 +159,19 @@
     </section>
 
     <script>
+        // Função para mostrar ou ocultar os tamanhos com base na seleção do produto
+        function toggleTamanhoSelect(produtoId) {
+            const select = document.querySelector(`select[name="produtos[${produtoId}][tamanho]"]`);
+            const qtdBox = document.querySelector(`#qtd${produtoId}`);
+
+            if (select.value == '0') {
+                qtdBox.setAttribute('readonly', 'readonly');
+                qtdBox.value = 0;
+            } else {
+                qtdBox.removeAttribute('readonly');
+            }
+        }
+
         document.addEventListener("DOMContentLoaded", function () {
             var filterItems = document.querySelectorAll(".filter-item");
             var filterButtons = document.querySelectorAll(".filters_menu li");

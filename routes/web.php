@@ -4,6 +4,7 @@ use App\Http\Controllers\EmpresaController;
 use App\Http\Controllers\PedidoController;
 use App\Http\Controllers\PedidoProdutoController;
 use App\Http\Controllers\ProdutoController;
+use App\Http\Controllers\TamanhoController;
 use App\Http\Controllers\TipoProdController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -56,6 +57,13 @@ Route::middleware(['auth', 'checkUserRole:Client'])->group(function () {
     Route::post('Empresa', [EmpresaController::class, 'store'])->name('empresa.store');
     Route::put('Empresa/{id}', [EmpresaController::class, 'update'])->name('empresa.update');
     Route::delete('Empresa/{id}', [EmpresaController::class, 'destroy'])->name('empresa.destroy');
+
+    #Tamanhos de Produtos
+    Route::get('tamanho', [TamanhoController::class, 'index'])->name('tamanho.index');
+    Route::get('tamanho/{id}', [TamanhoController::class, 'show'])->name('tamanho.show');
+    Route::post('tamanho', [TamanhoController::class, 'store'])->name('tamanho.store');
+    Route::put('tamanho/{id}', [TamanhoController::class, 'update'])->name('tamanho.update');
+    Route::delete('tamanho/{id}', [TamanhoController::class, 'destroy'])->name('tamanho.destroy');
 });
 
 #Processo Checkout

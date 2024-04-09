@@ -103,6 +103,26 @@
                                                             </div>
                                                         </div>
                                                     </div>
+                                                    <hr>
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+                                                            <h5>Tamanhos e Quantidades</h5>
+                                                            @foreach($tamanhos as $size)
+                                                                <div class="d-flex align-items-center mb-3">
+                                                                    <div class="form-check me-2">
+                                                                        <input class="form-check-input size-checkbox" type="checkbox" name="tamanhos[{{ $size->id }}][tamanho_id]" value="{{ $size->id }}" id="tamanho_{{ $size->id }}" onchange="toggleQuantityInput({{ $size->id }})">
+                                                                        <label class="form-check-label" for="tamanho_{{ $size->id }}">
+                                                                            {{ $size->nome }}
+                                                                        </label>
+                                                                    </div>
+                                                                    <div class="quantity-input-wrapper" style="flex-grow: 1;">
+                                                                        <input type="number" class="form-control quantity-input" placeholder="Quantidade" name="tamanhos[{{ $size->id }}][quantidade]" value="0" id="quantidade_{{ $size->id }}" disabled>
+                                                                    </div>
+                                                                </div>
+                                                            @endforeach
+                                                        </div>
+                                                    </div>
+
                                                 </div>
                                                 <div class="modal-footer">
                                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
@@ -216,6 +236,25 @@
                                                                                 </div>
                                                                             </div>
                                                                         </div>
+                                                                        <div class="row">
+                                                                            <div class="col-md-12">
+                                                                                <h5>Tamanhos e Quantidades</h5>
+                                                                                @foreach($tamanhos as $size)
+                                                                                    <div class="d-flex align-items-center mb-3">
+                                                                                        <div class="form-check me-2">
+                                                                                            <input class="form-check-input size-checkbox" type="checkbox" name="tamanhos[{{ $size->id }}][tamanho_id]" value="{{ $size->id }}" id="tamanho_{{ $size->id }}" onchange="toggleQuantityInput({{ $size->id }})">
+                                                                                            <label class="form-check-label" for="tamanho_{{ $size->id }}">
+                                                                                                {{ $size->nome }}
+                                                                                            </label>
+                                                                                        </div>
+                                                                                        <div class="quantity-input-wrapper" style="flex-grow: 1;">
+                                                                                            <input type="number" class="form-control quantity-input" placeholder="Quantidade" name="tamanhos[{{ $size->id }}][quantidade]" value="{{ $produto->tamanhos->find($size->id)->pivot->quantidade ?? 0 }}" id="quantidade_{{ $size->id }}" {{ $produto->mostrar == 'N' ? 'disabled' : '' }}>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                @endforeach
+                                                                            </div>
+                                                                        </div>
+
                                                                     </div>
                                                                     <div class="modal-footer">
                                                                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
@@ -245,6 +284,20 @@
 
 </main>
 <script>
+    function toggleQuantityInput(sizeId) {
+        const checkbox = document.getElementById(`tamanho_${sizeId}`);
+        const quantityInput = document.getElementById(`quantidade_${sizeId}`);
+
+        // Habilita ou desabilita o input de quantidade baseado no estado do checkbox
+        quantityInput.disabled = !checkbox.checked;
+
+        // Reseta o valor do input de quantidade para 0 se o checkbox não estiver marcado
+        if (!checkbox.checked) {
+            quantityInput.value = 0;
+        }
+    }
+
+
     function formatarPreco() {
         var precoInput = document.getElementById('preco');
         var precoValue = precoInput.value;

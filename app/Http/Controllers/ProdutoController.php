@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Produto;
+use App\Models\Tamanho;
 use App\Models\tipoProd;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -16,7 +17,8 @@ class ProdutoController extends Controller
     {
         $produtos = Produto::all();
         $tipoProd = tipoProd::all();
-        return view('produto.lista', compact(['produtos', 'tipoProd']));
+        $tamanhos = Tamanho::all();
+        return view('produto.lista', compact(['produtos', 'tipoProd', 'tamanhos']));
     }
 
     /**
@@ -72,6 +74,21 @@ class ProdutoController extends Controller
                 'preco' => $preco,
                 'descricao' => $descricao,
             ]);
+        }
+         // Verifica se o campo tamanhos foi preenchido
+        if ($request->has('tamanhos')) {
+            // Prepara os dados para inserção na tabela pivot
+            $dadosTamanhos = [];
+            foreach ($request->tamanhos as $id => $tamanho) {
+                if (isset($tamanho['tamanho_id'], $tamanho['quantidade']) && $tamanho['quantidade'] > 0) {
+                    // A chave é o tamanho_id, e o valor é a quantidade para a tabela pivot
+                    $dadosTamanhos[$tamanho['tamanho_id']] = ['quantidade' => $tamanho['quantidade']];
+                }
+            }
+
+            // Anexa os tamanhos ao produto com as quantidades especificadas
+            // syncWithoutDetaching mantém os tamanhos existentes e atualiza ou adiciona novos
+            $produto->tamanhos()->syncWithoutDetaching($dadosTamanhos);
         }
 
         return redirect()->route('produtos.index')->with('success', 'Produto criado com sucesso');
@@ -133,6 +150,11 @@ class ProdutoController extends Controller
 
         // Salve as alterações
         $produto->save();
+
+        // Atualize as quantidades dos tamanhos
+        foreach ($request->tamanhos as $sizeId => $data) {
+            $produto->tamanhos()->updateExistingPivot($sizeId, ['quantidade' => $data['quantidade']]);
+        }
 
         // Redirecione de volta à página de origem com uma mensagem de sucesso
         return redirect()->back()->with('success', 'Produto atualizado com sucesso');

@@ -127,11 +127,10 @@
                 form.submit();
             @else
                 if (nome && telefone) {
-                    var message = "*Camarão da Praça*\n\n";
-                    message += "Olá, segue pedido *#" + $('#id').val() + "*\n\n";
+                    var message = "🎉 Olá, estimado cliente! Seu pedido *#" + $('#id').val() + "* está sendo processado com todo o carinho pela Valentina Kids! 🎉\n\n";
 
                     // Construa a parte da mensagem com detalhes dos produtos aqui
-                    var produtosInfo = "*Produtos*:\n";
+                    var produtosInfo = "*🛍 Produtos:*\n";
                     $('.order-table tbody tr').each(function() {
                         var nomeProduto = $(this).find('strong').text();
                         var quantidade = $(this).find('span[id="qtd"]').text().split(": ")[1];
@@ -143,10 +142,34 @@
                     message += produtosInfo;
                     message += "*Total:* " + $('#total').text() + "\n";
                     message += "*Forma de Pagamento:* " + formaPagamento + "\n\n";
-                    message += "*ENTREGA:*\n";
+                    message += "*🚚 Entrega:*\n";
                     message += obs + "\n\n";
                     message += "*Nome:* " + nome + "\n";
                     message += "*Telefone:* " + telefone;
+                    message += "Seu pedido está em boas mãos! Nossa equipe está preparando seus itens com cuidado para garantir que você receba produtos de alta qualidade para os pequenos da sua vida. 😊" + "\n\n";
+                    message += "Fique atento ao seu telefone, entraremos em contato para confirmar os detalhes da entrega e garantir que tudo esteja perfeito para você." + "\n\n";
+                    message += "Se tiver alguma dúvida ou precisar de assistência adicional, não hesite em nos contatar. Estamos aqui para ajudar!" + "\n\n";
+                    message += "Agradecemos sua confiança na Valentina Kids e esperamos que sua experiência de compra seja excepcional!" + "\n\n";
+
+🛍 Produtos:
+
+Camarão c/ Queijo
+Quantidade: 1
+Subtotal: R$16.00
+Total: R$16.00
+Forma de Pagamento: DEBITO
+
+🚚 ENTREGA:
+
+Destinatário: Teste
+Telefone: 7199999999
+Seu pedido está em boas mãos! Nossa equipe está preparando seus itens com cuidado para garantir que você receba produtos de alta qualidade para os pequenos da sua vida. 😊
+
+Fique atento ao seu telefone, entraremos em contato para confirmar os detalhes da entrega e garantir que tudo esteja perfeito para você.
+
+Se tiver alguma dúvida ou precisar de assistência adicional, não hesite em nos contatar. Estamos aqui para ajudar!
+
+Agradecemos sua confiança na Valentina Kids e esperamos que sua experiência de compra seja excepcional!
 
                     var recipientPhoneNumber = @if($empresa) {{ $empresa->whats_number }} @endif;
                     var encodedMessage = encodeURIComponent(message);

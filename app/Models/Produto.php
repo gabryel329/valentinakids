@@ -25,4 +25,11 @@ class Produto extends Model
     {
         return $this->belongsTo(tipoProd::class, 'tipo');
     }
+
+    public function tamanhos()
+    {
+        return $this->belongsToMany(Tamanho::class, 'tamanhoproduto', 'produto_id', 'tamanho_id')
+                    ->withPivot('quantidade')
+                    ->withTimestamps();
+    }
 }
